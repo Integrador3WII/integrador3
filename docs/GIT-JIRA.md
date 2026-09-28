@@ -1,42 +1,44 @@
 # Integración de GitHub, Jira y Pull Requests
 
-El proyecto Jira confirmado es `SCRUM`. Cada vez que Jira cree una historia, se debe sustituir `<clave-jira>` por su identificador real, por ejemplo `SCRUM-12`.
-
 ## Convención de ramas
 
 ```text
-feature/SCRUM-<numero>-<descripcion>
-bugfix/SCRUM-<numero>-<descripcion>
-test/SCRUM-<numero>-<descripcion>
+feature/TF-<numero>-<descripcion>
+bugfix/TF-<numero>-<descripcion>
+test/TF-<numero>-<descripcion>
 release/v<version>
-hotfix/SCRUM-<numero>-<descripcion>
+hotfix/TF-<numero>-<descripcion>
 ```
 
-Ejemplo para la historia del dashboard:
+Para el sprint de Dev 2:
 
 ```text
-feature/SCRUM-12-admin-dashboard
+feature/TF-201-admin-dashboard
 ```
-
-La rama histórica `feature/TF-201-admin-dashboard` fue creada antes de confirmar la clave Jira. Se renombrará cuando Jira genere la clave real de la historia.
 
 ## Flujo del repositorio
 
-1. Se crea la historia en Jira y se registra su clave.
-2. El integrante crea una rama desde `develop` con esa clave.
-3. Cada commit incluye la misma clave: `SCRUM-12 crea dashboard administrativo`.
-4. Se abre un Pull Request hacia `develop`.
-5. Otro integrante revisa el código; Tester/QA verifica los criterios de aceptación.
-6. CI ejecuta typecheck, pruebas y build.
-7. Tras aprobación, se realiza el merge a `develop`.
-8. `main` contiene únicamente incrementos demostrables de un Sprint cerrado.
+1. Cada integrante trabaja sobre una rama propia.
+2. La rama se crea desde `develop`.
+3. El nombre incluye la clave de Jira.
+4. Los commits incluyen la misma clave, por ejemplo: `TF-201 crea dashboard administrativo`.
+5. Se abre un Pull Request hacia `develop`.
+6. Otro integrante revisa el código.
+7. CI ejecuta typecheck, pruebas y build.
+8. Solo después de aprobarse se realiza el merge.
+9. `main` contiene únicamente incrementos demostrables.
 
 ## ¿Por qué no usar forks?
 
-No se usarán forks: todo el equipo trabaja sobre el mismo producto y debe ser colaborador del repositorio central. Las ramas protegidas y los Pull Requests aportan trazabilidad sin duplicar repositorios. Los forks se reservan para contribuciones externas.
+No se usarán forks porque el equipo trabaja dentro de un mismo repositorio y todos son colaboradores del proyecto. Las ramas y Pull Requests ofrecen trazabilidad suficiente con menos complejidad operativa. Un fork quedaría reservado para colaboradores externos sin permisos directos.
 
-## Estado de conexión
+## Conexión pendiente
 
-- GitHub: la integración está disponible, pero este workspace aún no tiene un remoto configurado.
-- Jira: el tablero es `SCRUM`, pero la integración Atlassian aún no está expuesta a esta sesión.
-- Backlog importable: `docs/jira/SCRUM-dev2-import.csv`.
+Para conectar el repositorio y Jira faltan datos externos que no deben escribirse en el código:
+
+- URL del repositorio GitHub.
+- Clave del proyecto Jira, por ejemplo `TF`.
+- URL del tablero Jira.
+- Usuarios/cuentas que deben tener acceso.
+
+No se guardan tokens ni contraseñas en este repositorio. La conexión deberá hacerse mediante autenticación de GitHub/Jira o variables secretas de CI.
