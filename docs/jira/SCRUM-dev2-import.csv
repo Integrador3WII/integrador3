@@ -1,0 +1,9 @@
+Issue Type,Summary,Description,Priority,Labels,Assignee,Epic Name
+Epic,Administración web,"Módulo administrativo de TextilFlow 2.0 para autenticación, dashboard, pedidos, productos e inventario.",High,"textilflow,admin-web",,Administración web
+Story,Iniciar sesión como administrador,"Como administrador quiero iniciar sesión con correo y contraseña para acceder de manera segura al panel administrativo. Criterios: se crea sesión válida; usuarios no autenticados ven login; errores no exponen detalles sensibles.",High,"textilflow,admin-web,sprint-dev2",,
+Story,Visualizar dashboard administrativo,"Como administrador quiero visualizar métricas y pedidos recientes para conocer el estado de la operación. Criterios: muestra métricas, tabla de pedidos y diseño adaptable.",High,"textilflow,admin-web,sprint-dev2",,
+Story,Consultar pedidos recientes según RLS,"Como administrador autenticado quiero consultar los pedidos permitidos por mi rol. Criterios: consulta usa la sesión; RLS controla filas; no se habilita acceso anon a pedidos.",High,"textilflow,admin-web,sprint-dev2",,
+Task,Probar autenticación administrativa,"Casos unitarios e integración: login válido, inválido, sesión ausente y cierre de sesión.",High,"textilflow,qa,sprint-dev2",jhonmaytaflores@gmail.com,
+Task,Probar dashboard y regresión de pedidos,"Casos unitarios: métricas, tabla, estados y modo de demostración. Documentar evidencia de regresión.",Medium,"textilflow,qa,sprint-dev2",jhonmaytaflores@gmail.com,
+Epic,Web cliente,"Módulo futuro: catálogo, personalización, cotizaciones y seguimiento de pedidos.",Medium,"textilflow,client-web",lian141924@gmail.com,Web cliente
+Epic,Operación móvil,"Módulo futuro: tareas de producción, cambio de estados, QR y control de calidad.",Medium,"textilflow,mobile",gaby64838342@gmail.com,Operación móvil
