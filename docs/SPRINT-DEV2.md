@@ -2,25 +2,23 @@
 
 ## Objetivo del Sprint
 
-Construir el primer incremento visible de la web administrativa de TextilFlow 2.0: una base ejecutable con dashboard, métricas y pedidos recientes, preparada para integrar Supabase.
+Construir el primer incremento funcional de la web administrativa de TextilFlow 2.0: autenticación, dashboard y consulta protegida de pedidos.
 
-## Alcance
-
-Incluido:
+## Alcance incluido
 
 - Estructura React + TypeScript + Vite.
+- Inicio de sesión mediante Supabase Auth.
 - Dashboard administrativo.
-- Métricas de pedidos, producción, completados e ingresos.
+- Métricas iniciales de pedidos, producción, completados e ingresos.
 - Tabla de pedidos recientes.
+- Consulta de pedidos mediante Supabase, respetando RLS.
 - Navegación inicial para pedidos, productos, inventario, cotizaciones y usuarios.
-- Configuración inicial de pruebas unitarias.
+- Pruebas unitarias iniciales.
 - Pipeline de integración continua.
-- Cliente Supabase preparado mediante variables de entorno.
 
-No incluido todavía:
+## Fuera de alcance de este Sprint
 
 - CRUD persistente de productos.
-- Autenticación.
 - Cambio de estados contra Supabase.
 - Inventario real.
 - App móvil, web cliente y pruebas E2E.
@@ -38,6 +36,8 @@ Como administrador quiero visualizar un resumen de la operación para conocer r�
 - La navegación presenta los módulos administrativos previstos.
 - La interfaz funciona en escritorio y en una vista móvil básica.
 - Las pruebas unitarias del dashboard pasan en CI.
+- Un usuario no autenticado no puede acceder al dashboard cuando Supabase está configurado.
+- La consulta de pedidos depende de las políticas RLS del usuario autenticado.
 
 ## Definition of Done
 
