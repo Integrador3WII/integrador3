@@ -8,7 +8,7 @@ describe('Dashboard administrativo', () => {
   it('muestra el panel principal y sus métricas', () => {
     render(<App />);
 
-    expect(screen.getByRole('heading', { name: /buenos días, administrador/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /gestión textil con intención/i })).toBeInTheDocument();
     expect(screen.getByText('Pedidos hoy')).toBeInTheDocument();
     expect(screen.getAllByText('En producción')).toHaveLength(2);
   });
