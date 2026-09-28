@@ -10,7 +10,7 @@ describe('Dashboard administrativo', () => {
 
     expect(screen.getByRole('heading', { name: /buenos días, administrador/i })).toBeInTheDocument();
     expect(screen.getByText('Pedidos hoy')).toBeInTheDocument();
-    expect(screen.getByText('En producción')).toBeInTheDocument();
+    expect(screen.getAllByText('En producción')).toHaveLength(2);
   });
 
   it('muestra los pedidos recientes del incremento', () => {
