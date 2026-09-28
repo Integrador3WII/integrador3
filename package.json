@@ -1,0 +1,16 @@
+{
+  "name": "textilflow-2",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:admin": "npm --workspace apps/admin-web run dev",
+    "build:admin": "npm --workspace apps/admin-web run build",
+    "test:admin": "npm --workspace apps/admin-web run test",
+    "test:admin:coverage": "npm --workspace apps/admin-web run test:coverage",
+    "typecheck:admin": "npm --workspace apps/admin-web run typecheck"
+  }
+}

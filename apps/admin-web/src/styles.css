@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap');
+
+:root { color: #1d2939; background: #f6f8fb; font-family: 'DM Sans', sans-serif; font-synthesis: none; }
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+button, a { font: inherit; }
+a { color: inherit; text-decoration: none; }
+.app-shell { display: flex; min-height: 100vh; }
+.sidebar { background: #101b2d; color: #b6c0cf; display: flex; flex-direction: column; padding: 28px 18px 22px; width: 250px; }
+.brand { align-items: center; color: #fff; display: flex; gap: 11px; padding: 0 10px 42px; }
+.brand-mark { align-items: center; background: #f0aa63; border-radius: 11px; color: #101b2d; display: flex; font-weight: 700; height: 38px; justify-content: center; width: 38px; }
+.brand strong, .brand span, .user-profile strong, .user-profile span { display: block; }
+.brand strong { font-size: 17px; }
+.brand span { color: #8290a4; font-size: 11px; margin-top: 3px; }
+nav { display: grid; gap: 8px; }
+.nav-item { align-items: center; border-radius: 9px; display: flex; font-size: 13px; gap: 13px; padding: 13px 12px; }
+.nav-item:hover, .nav-item.active { background: #1e2d47; color: #fff; }
+.nav-item.active { box-shadow: inset 3px 0 #f0aa63; }
+.nav-item small { background: #f0aa63; border-radius: 20px; color: #18243a; font-size: 10px; margin-left: auto; padding: 2px 7px; }
+.sidebar-footer { align-items: center; display: flex; font-size: 11px; gap: 8px; margin-top: auto; padding: 10px; }
+.status-dot { background: #54c993; border-radius: 50%; height: 7px; width: 7px; }
+.main-content { flex: 1; max-width: 1600px; padding: 38px 52px 60px; }
+.topbar { align-items: center; display: flex; justify-content: space-between; margin-bottom: 34px; }
+.eyebrow { color: #8793a5; font-size: 10px; font-weight: 700; letter-spacing: .13em; margin: 0 0 7px; text-transform: uppercase; }
+h1, h2, p { margin-top: 0; }
+h1 { color: #182338; font-family: 'Playfair Display', serif; font-size: 29px; margin-bottom: 0; }
+h2 { color: #182338; font-size: 18px; margin-bottom: 0; }
+.topbar-actions, .user-profile { align-items: center; display: flex; }
+.topbar-actions { gap: 26px; }
+.icon-button, .more-button { background: none; border: 0; color: #718096; cursor: pointer; position: relative; }
+.icon-button { font-size: 22px; }
+.notification-dot { background: #ef8b62; border: 2px solid #f6f8fb; border-radius: 50%; height: 8px; position: absolute; right: 0; top: 1px; width: 8px; }
+.user-profile { gap: 11px; }
+.user-profile strong { color: #334155; font-size: 12px; }
+.user-profile span { color: #94a0b1; font-size: 10px; margin-top: 3px; }
+.avatar { align-items: center; background: #dbe8f7; border-radius: 50%; color: #3670a9; display: flex; font-size: 12px; font-weight: 700; height: 39px; justify-content: center; width: 39px; }
+.metrics-grid { display: grid; gap: 18px; grid-template-columns: repeat(4, 1fr); margin-bottom: 25px; }
+.metric-card { align-items: center; background: #fff; border: 1px solid #edf0f5; border-radius: 12px; display: flex; gap: 15px; min-height: 122px; padding: 19px; }
+.metric-icon { align-items: center; border-radius: 10px; display: flex; font-size: 25px; height: 47px; justify-content: center; width: 47px; }
+.metric-card.blue .metric-icon { background: #e3f0fc; color: #5a9bd8; }.metric-card.violet .metric-icon { background: #eeeafd; color: #8876df; }.metric-card.green .metric-icon { background: #e2f8ee; color: #59ba8d; }.metric-card.amber .metric-icon { background: #fff2df; color: #e5a04e; }
+.metric-card span, .metric-card strong, .metric-card small { display: block; }.metric-card span { color: #8995a5; font-size: 11px; }.metric-card strong { color: #1c2a40; font-size: 25px; margin: 7px 0 3px; }.metric-card small { color: #5eb78e; font-size: 10px; }
+.content-grid { display: grid; gap: 25px; grid-template-columns: minmax(0, 1.7fr) minmax(290px, .85fr); }
+.panel { background: #fff; border: 1px solid #edf0f5; border-radius: 12px; padding: 25px; }.panel-heading { align-items: flex-start; display: flex; justify-content: space-between; margin-bottom: 23px; }.panel-heading a { color: #578fc6; font-size: 11px; font-weight: 600; }.more-button { letter-spacing: 2px; }
+.table-wrapper { overflow-x: auto; } table { border-collapse: collapse; width: 100%; } th { color: #97a1af; font-size: 9px; font-weight: 600; letter-spacing: .08em; padding: 0 10px 13px; text-align: left; text-transform: uppercase; } td { border-top: 1px solid #f0f2f6; color: #657184; font-size: 11px; padding: 16px 10px; white-space: nowrap; } td strong { color: #354256; font-weight: 600; }
+.badge { border-radius: 20px; display: inline-block; font-size: 9px; padding: 6px 9px; }.badge.pendiente { background: #fff3d7; color: #bc8a2e; }.badge.en-producción { background: #e5f0fb; color: #4283bd; }.badge.listo { background: #e2f7ed; color: #42a378; }.badge.entregado { background: #edeafa; color: #7568be; }
+.chart { align-items: end; display: flex; gap: 14px; height: 180px; justify-content: space-around; padding: 15px 5px 0; }.bar-column { align-items: center; display: flex; flex: 1; flex-direction: column; height: 100%; justify-content: end; }.bar { background: linear-gradient(180deg, #8ab6e1, #d8e9fa); border-radius: 5px 5px 2px 2px; min-height: 18px; width: min(25px, 80%); }.bar-column:nth-child(6) .bar { background: linear-gradient(180deg, #e9a261, #f9d8b2); }.bar-column span { color: #a0a9b5; font-size: 9px; margin-top: 9px; }.chart-summary { border-top: 1px solid #eef1f5; margin-top: 19px; padding-top: 18px; }.chart-summary strong { color: #1d2b40; display: block; font-size: 20px; }.chart-summary span { color: #9ca6b3; font-size: 10px; }
+@media (max-width: 1050px) { .main-content { padding: 30px; }.metrics-grid { grid-template-columns: repeat(2, 1fr); }.content-grid { grid-template-columns: 1fr; } }
+@media (max-width: 700px) { .sidebar { width: 66px; padding: 20px 9px; }.brand { padding: 0 5px 35px; }.brand > div:last-child, .nav-item span, .nav-item small, .sidebar-footer { display: none; }.nav-item { justify-content: center; }.main-content { padding: 25px 16px; }.topbar { align-items: flex-start; gap: 15px; }.topbar-actions { gap: 10px; }.user-profile > div:last-child { display: none; }.metrics-grid { gap: 10px; }.metric-card { min-height: 105px; padding: 12px; }.metric-card strong { font-size: 20px; }.metric-icon { height: 35px; width: 35px; }.panel { padding: 16px; } }
