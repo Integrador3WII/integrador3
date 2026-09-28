@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import App from './App';
 
@@ -19,5 +19,13 @@ describe('Dashboard administrativo', () => {
     expect(screen.getByText('#1042')).toBeInTheDocument();
     expect(screen.getByText('Ana Vargas')).toBeInTheDocument();
     expect(screen.getByText('Hoodie bordado')).toBeInTheDocument();
+  });
+
+  it('permite cambiar el panel a modo oscuro', () => {
+    const { container } = render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /modo oscuro/i }));
+
+    expect(container.querySelector('.admin-shell')).toHaveClass('dark-mode');
   });
 });
