@@ -15,6 +15,7 @@ Incluido:
 - Navegación inicial para pedidos, productos, inventario, cotizaciones y usuarios.
 - Configuración inicial de pruebas unitarias.
 - Pipeline de integración continua.
+- Cliente Supabase preparado mediante variables de entorno.
 
 No incluido todavía:
 
