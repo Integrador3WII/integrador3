@@ -1,0 +1,14 @@
+.git
+.github
+.vscode
+node_modules
+**/node_modules
+**/dist
+**/coverage
+**/.env
+**/.env.*
+!.env.example
+**/*.local
+e2e/artifacts
+supabase/.temp
+

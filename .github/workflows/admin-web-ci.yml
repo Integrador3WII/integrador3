@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - 'apps/admin-web/**'
+      - 'supabase/migrations/**'
+      - 'supabase/tests/**'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/admin-web-ci.yml'
@@ -11,6 +13,8 @@ on:
     branches: [main, develop]
     paths:
       - 'apps/admin-web/**'
+      - 'supabase/migrations/**'
+      - 'supabase/tests/**'
       - 'package.json'
       - 'package-lock.json'
       - '.github/workflows/admin-web-ci.yml'
@@ -27,10 +31,12 @@ jobs:
           node-version: 22
           cache: npm
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: Typecheck
         run: npm run typecheck:admin
       - name: Unit tests
         run: npm run test:admin
+      - name: Isolated PostgreSQL contract tests
+        run: npm --workspace apps/admin-web run test:db
       - name: Production build
         run: npm run build:admin
