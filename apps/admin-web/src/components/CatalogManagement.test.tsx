@@ -79,7 +79,7 @@ describe('Inventario administrativo', () => {
   async function openMovement() {
     render(<InventoryManagement userId="admin" />);
     fireEvent.click(await screen.findByRole('button', { name: `Registrar movimiento de ${variant.sku}` }));
-    fireEvent.change(screen.getByLabelText('Cantidad'), { target: { value: '5' } });
+    fireEvent.change(screen.getByLabelText('Cantidad de prendas'), { target: { value: '5' } });
     fireEvent.change(screen.getByLabelText('Motivo'), { target: { value: 'Compra proveedor' } });
     await act(async () => { fireEvent.click(screen.getByRole('button', { name: 'Confirmar movimiento' })); });
   }
@@ -94,7 +94,7 @@ describe('Inventario administrativo', () => {
     await openMovement();
     expect(await screen.findByRole('alert')).toHaveTextContent('Conexión interrumpida');
     const firstInput = vi.mocked(api.recordMovement).mock.calls[0][0];
-    expect(screen.getByLabelText('Cantidad')).toBeDisabled();
+    expect(screen.getByLabelText('Cantidad de prendas')).toBeDisabled();
     cleanup();
     vi.mocked(api.recordMovement).mockResolvedValue({ quantity_delta: 5, quantity_after: 15 } as api.Movement);
     render(<InventoryManagement userId="admin" />);
@@ -108,7 +108,7 @@ describe('Inventario administrativo', () => {
     vi.mocked(api.recordMovement).mockRejectedValue(Object.assign(new Error('Stock insuficiente'), { code: '22023' }));
     await openMovement();
     expect(await screen.findByRole('alert')).toHaveTextContent('Stock insuficiente');
-    expect(screen.getByLabelText('Cantidad')).not.toBeDisabled();
+    expect(screen.getByLabelText('Cantidad de prendas')).not.toBeDisabled();
     expect(sessionStorage.getItem('textilflow.inventory.pending:admin')).toBeNull();
   });
   it('deshabilita movimientos para productos no publicados', async () => {

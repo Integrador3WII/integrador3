@@ -20,7 +20,7 @@ it('permite recuperar un listado tras un fallo de conexión', async () => {
 });
 it('abre el detalle y presenta el precio histórico', async () => {
   vi.mocked(api.listAdminOrders).mockResolvedValue({ rows: [{ id: 'pedido-1', status: 'confirmed', total: 100 }], count: 1 });
-  vi.mocked(api.getAdminOrder).mockResolvedValue({ order: { id: 'pedido-1', total: 100 }, items: [{ id: 'item', product_name_snapshot: 'Polera histórica', unit_price: 50, quantity: 2 }] });
+  vi.mocked(api.getAdminOrder).mockResolvedValue({ order: { id: 'pedido-1', total: 100 }, items: [{ id: 'item', product_name_snapshot: 'Polera histórica', unit_price: 50, quantity: 2 }], materials: [] });
   render(<OrderManagement />);
   fireEvent.click(await screen.findByRole('button', { name: 'Ver pedido' }));
   expect(await screen.findByText('Polera histórica')).toBeInTheDocument();
@@ -29,7 +29,7 @@ it('abre el detalle y presenta el precio histórico', async () => {
 });
 it('recupera el historial después de un error y muestra la observación registrada', async () => {
   vi.mocked(api.listAdminOrders).mockResolvedValue({ rows: [{ id: 'pedido-2', status: 'in_production', total: 50 }], count: 1 });
-  vi.mocked(api.getAdminOrder).mockResolvedValue({ order: { id: 'pedido-2', total: 50 }, items: [] });
+  vi.mocked(api.getAdminOrder).mockResolvedValue({ order: { id: 'pedido-2', total: 50 }, items: [], materials: [] });
   vi.mocked(api.listOrderHistory).mockRejectedValueOnce(new Error('Historial temporalmente inaccesible')).mockResolvedValue({ rows: [{ id: 'history-1', from_status: 'confirmed', to_status: 'in_production', note: 'Inicio autorizado por taller', created_at: '2026-11-01T15:00:00Z' }], count: 1 });
   render(<OrderManagement />);
   fireEvent.click(await screen.findByRole('button', { name: 'Ver pedido' }));
@@ -57,7 +57,7 @@ it('envía el filtro de estado y reinicia la página', async () => {
 });
 it('mantiene el diálogo y explica un cambio rechazado por el servidor', async () => {
   vi.mocked(api.listAdminOrders).mockResolvedValue({ rows: [{ id:'pedido-3',status:'confirmed',total:50 }],count:1 });
-  vi.mocked(api.getAdminOrder).mockResolvedValue({ order:{id:'pedido-3',status:'confirmed',total:50},items:[] });
+  vi.mocked(api.getAdminOrder).mockResolvedValue({ order:{id:'pedido-3',status:'confirmed',total:50},items:[],materials:[] });
   vi.mocked(api.transitionOrder).mockRejectedValue(new Error('Estado actualizado por otra persona'));
   render(<OrderManagement />);
   fireEvent.click(await screen.findByRole('button',{name:'Ver pedido'}));

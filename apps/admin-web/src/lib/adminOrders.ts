@@ -59,10 +59,11 @@ export async function listOrderHistory(id: string, page: number) {
 }
 export async function getAdminOrder(id: string) {
   if (!supabase) throw new Error('La conexión de datos no está configurada.');
-  const [order, items] = await Promise.all([
+  const [order, items, materials] = await Promise.all([
     supabase.from('orders').select('*,customer:profiles!orders_customer_id_fkey(full_name,phone)').eq('id', id).single(),
     supabase.from('order_items').select('*').eq('order_id', id).order('id'),
+    supabase.from('order_material_requirements').select('id,order_item_id,material_name_snapshot,unit_snapshot,planned_quantity,reserved_quantity,consumed_quantity').eq('order_id', id).order('material_name_snapshot'),
   ]);
-  if (order.error || items.error) throw new Error('No se pudo cargar el detalle completo del pedido.');
-  return { order: order.data as OrderRow, items: (items.data ?? []) as OrderRow[] };
+  if (order.error || items.error || materials.error) throw new Error('No se pudo cargar el detalle completo del pedido.');
+  return { order: order.data as OrderRow, items: (items.data ?? []) as OrderRow[], materials: (materials.data ?? []) as OrderRow[] };
 }
