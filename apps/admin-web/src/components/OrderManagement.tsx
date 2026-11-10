@@ -69,11 +69,12 @@ function OrderDetail({ id, onClose, onChanged }: { id: string; onClose: () => vo
       <p>Entrega: {detail.order.delivery_method === 'delivery' ? String(detail.order.shipping_address ?? 'Dirección no disponible') : 'Recojo en taller'}</p>
       <p className="catalog-help">Precios registrados en el pedido.</p>
       {detail.items.length === 0 ? <p>El pedido no tiene prendas registradas.</p> : <ol className="movement-history">{detail.items.map(item => <li key={item.id}><strong>{String(item.product_name_snapshot ?? 'Prenda')}</strong><p>{String(item.sku_snapshot ?? 'Sin SKU')} · {String(item.color_snapshot ?? '')} · {String(item.size_snapshot ?? '')}</p><small>Cantidad: {String(item.quantity ?? '—')} · Precio unitario: {displayAmount(item.unit_price)}</small></li>)}</ol>}
+      {detail.materials.length > 0 && <section aria-label="Materiales de producción"><h3>Materiales para producción</h3><ol className="movement-history">{detail.materials.map((material,index)=><li key={`${String(material.order_item_id)}-${index}`}><strong>{String(material.material_name_snapshot)}</strong><p>Planificado: {String(material.planned_quantity)} {String(material.unit_snapshot)}</p><small>{Number(material.reserved_quantity)>0?`Reservado: ${String(material.reserved_quantity)} ${String(material.unit_snapshot)}`:`Consumido: ${String(material.consumed_quantity)} ${String(material.unit_snapshot)}`}</small></li>)}</ol></section>}
       {success && <p role="status">{success}</p>}
       {(allowedOrderTransitions[String(detail.order.status)] ?? []).length > 0 && <form className="catalog-form" onSubmit={changeStatus}>
         <h3>Cambiar estado</h3><label>Nuevo estado<select required disabled={saving} value={status} onChange={e => setStatus(e.target.value)}><option value="">Seleccionar…</option>{(allowedOrderTransitions[String(detail.order.status)] ?? []).map(value => <option key={value} value={value}>{displayStatus(value)}</option>)}</select></label>
         <label>Observación{status === 'cancelled' ? ' (obligatoria)' : ''}<textarea disabled={saving} required={status === 'cancelled'} minLength={status === 'cancelled' ? 5 : undefined} maxLength={500} value={note} onChange={e => setNote(e.target.value)} /></label>
-        {status === 'cancelled' && <p>Al confirmar se cancelará el pedido y se devolverá su stock.</p>}
+        {status === 'cancelled' && <p>Se liberará la materia prima reservada y se devolverán las prendas terminadas que correspondan.</p>}
         {actionError && <p role="alert">{actionError}</p>}<button className="catalog-button" disabled={saving || !status}>{saving ? 'Guardando…' : 'Confirmar cambio'}</button>
       </form>}
       <History key={retry} id={id} />

@@ -4,6 +4,9 @@ on:
   pull_request:
     paths:
       - 'apps/admin-web/**'
+      - 'apps/client-web/**'
+      - 'apps/mobile/**'
+      - 'packages/shared/**'
       - 'supabase/migrations/**'
       - 'supabase/tests/**'
       - 'package.json'
@@ -13,6 +16,9 @@ on:
     branches: [main, develop]
     paths:
       - 'apps/admin-web/**'
+      - 'apps/client-web/**'
+      - 'apps/mobile/**'
+      - 'packages/shared/**'
       - 'supabase/migrations/**'
       - 'supabase/tests/**'
       - 'package.json'
@@ -40,3 +46,5 @@ jobs:
         run: npm --workspace apps/admin-web run test:db
       - name: Production build
         run: npm run build:admin
+      - name: Portal builds
+        run: npm run build:portals

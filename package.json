@@ -11,6 +11,9 @@
     "build:admin": "npm --workspace apps/admin-web run build",
     "test:admin": "npm --workspace apps/admin-web run test",
     "test:admin:coverage": "npm --workspace apps/admin-web run test:coverage",
-    "typecheck:admin": "npm --workspace apps/admin-web run typecheck"
+    "typecheck:admin": "npm --workspace apps/admin-web run typecheck",
+    "dev:client": "npm --workspace apps/client-web run dev --",
+    "dev:mobile": "npm --workspace apps/mobile run dev --",
+    "build:portals": "npm run build --workspace apps/client-web --workspace apps/mobile"
   }
 }

@@ -28,6 +28,7 @@ let history=[];
       else if(p.endsWith('/rpc/convert_quote_to_order'))data=id;
       else if(p.endsWith('/orders'))data=single?order:[order];
       else if(p.endsWith('/order_items'))data=[{id:'oi',product_name_snapshot:'Polera algodón',sku_snapshot:'POL-AZ-M',quantity:2,unit_price:50}];
+      else if(p.endsWith('/order_material_requirements'))data=[{id:'mat',order_item_id:'oi',material_name_snapshot:'Tela de algodón',unit_snapshot:'m',planned_quantity:3.3,reserved_quantity:3.3,consumed_quantity:0}];
       else if(p.endsWith('/order_status_history'))data=history;
       else if(p.endsWith('/quotes'))data=single?(url.searchParams.get('id')===`eq.${aid}`?approved:quote):[quote,approved];
       else if(p.endsWith('/quote_items'))data=[{id:'qi',quantity:2,variant:{sku:'POL-AZ-M',product:{name:'Polera algodón'}}}];

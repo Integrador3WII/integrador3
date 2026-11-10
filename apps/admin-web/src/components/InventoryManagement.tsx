@@ -47,11 +47,11 @@ function InventoryWorkspace({ storageKey }: { storageKey: string }) {
     setPending(value);
   }
   return <section className="catalog-workspace" aria-labelledby="inventory-title">
-    <div className="users-header"><div><p className="eyebrow">ADMIN WEB · INVENTARIO</p><h1 id="inventory-title">Cada unidad cuenta.</h1><p>Existencias por variante e historial de entradas y salidas.</p></div><button className="catalog-button" disabled={loading} onClick={() => setRefresh(n => n + 1)}>Actualizar</button></div>
+    <div className="users-header"><div><p className="eyebrow">ADMIN WEB · PRENDAS TERMINADAS</p><h1 id="inventory-title">Prendas listas para entregar.</h1><p>Unidades confeccionadas por variante e historial de sus movimientos.</p></div><button className="catalog-button" disabled={loading} onClick={() => setRefresh(n => n + 1)}>Actualizar</button></div>
     {notice && <p className="users-message success" role="status">{notice}</p>}
     {pending && <div className="catalog-pending" role="status"><p>Hay una operación sin confirmar para <strong>{pending.sku}</strong>. Reinténtala con el mismo identificador antes de registrar otra.</p><button className="catalog-button" onClick={() => setTarget({ id: pending.input.variantId, sku: pending.sku, stock: null })}>Revisar operación pendiente</button></div>}
     {error && <p role="alert" className="users-message error">{error} <button className="catalog-button" onClick={() => setRefresh(n => n + 1)}>Reintentar</button></p>}
-    <div className="catalog-toolbar"><label>Buscar por SKU<input type="search" value={search} onChange={e => { setSearch(e.target.value); setPage(0); }} placeholder="Ej. POL-AZ-M" /></label><p className="catalog-help">Solo variantes, productos y categorías activos admiten movimientos.</p></div>
+    <div className="catalog-toolbar"><label>Buscar por SKU<input type="search" value={search} onChange={e => { setSearch(e.target.value); setPage(0); }} placeholder="Ej. POL-AZ-M" /></label><p className="catalog-help">Este saldo representa prendas confeccionadas disponibles para pedidos desde unidades terminadas.</p></div>
     <div className="catalog-card"><div className="catalog-table-scroll"><table><caption className="sr-only">Existencias por variante</caption><thead><tr><th>Prenda / SKU</th><th>Variante</th><th>Disponible</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>
       {!loading && !error && rows.map(row => {
         const enabled = row.status === 'active' && row.products?.status === 'active' && row.products?.categories?.is_active;
@@ -59,8 +59,8 @@ function InventoryWorkspace({ storageKey }: { storageKey: string }) {
         const item = { id: row.id, sku: row.sku, stock };
         return <tr key={row.id}><td data-label="Prenda / SKU"><strong>{row.products?.name ?? 'Producto'}</strong><small>{row.sku}</small></td><td data-label="Variante">{row.color_name} · {row.size_code}</td><td data-label="Disponible"><strong className={stock === 0 ? 'stock-empty' : 'stock-amount'}>{stock ?? '—'}</strong><small>unidades</small></td><td data-label="Estado"><span className={`catalog-status ${enabled ? 'active' : 'inactive'}`}>{enabled ? 'Disponible' : statusLabels[row.status] === 'Activo' ? 'No publicado' : statusLabels[row.status]}</span></td><td data-label="Acciones"><div className="catalog-row-actions"><button disabled={!enabled || stock === null || Boolean(pending)} aria-label={`Registrar movimiento de ${row.sku}`} onClick={() => setTarget(item)}>Movimiento</button><button aria-label={`Historial de ${row.sku}`} onClick={() => setHistory(item)}>Historial</button></div></td></tr>;
       })}
-    </tbody></table>{loading ? <p className="catalog-empty" role="status">Cargando inventario…</p> : !error && !rows.length && <p className="catalog-empty">No hay variantes para mostrar. Crea una prenda y sus variantes en Catálogo.</p>}</div><Pagination page={page} count={count} onPage={setPage} busy={loading} /></div>
-    <p className="catalog-help">El saldo solo cambia al registrar una operación. El historial se conserva y no se puede editar desde este panel.</p>
+    </tbody></table>{loading ? <p className="catalog-empty" role="status">Cargando prendas terminadas…</p> : !error && !rows.length && <p className="catalog-empty">No hay variantes para mostrar. Crea una prenda y sus variantes en Catálogo.</p>}</div><Pagination page={page} count={count} onPage={setPage} busy={loading} /></div>
+    <p className="catalog-help">Estas unidades son prendas confeccionadas. La fabricación bajo pedido descuenta materiales y se administra en Materiales y producción.</p>
     {target && <MovementEditor target={target} pending={pending} persist={persistPending} onClose={() => setTarget(null)} onSaved={movement => {
       setTarget(null); setNotice(`Movimiento confirmado: ${movement.quantity_delta > 0 ? '+' : ''}${movement.quantity_delta} unidades. Saldo al registrar: ${movement.quantity_after}.`); setRefresh(n => n + 1);
     }} />}
@@ -97,8 +97,8 @@ function MovementEditor({ target, pending, persist, onClose, onSaved }: { target
     <p className="catalog-help">{target.stock === null ? 'Reconfirmación de una operación pendiente.' : `Saldo consultado: ${target.stock} unidades. El servidor comprobará el saldo actual.`}</p>
     {error && <p className="users-message error" role="alert">{error}</p>}
     {pending && <p className="catalog-help">Los datos permanecen bloqueados para reintentar sin duplicar el movimiento. Si cierras, la operación pendiente se conserva en esta pestaña.</p>}
-    <fieldset disabled={busy || Boolean(pending)}><label>Tipo de movimiento<select value={direction} onChange={e => setDirection(e.target.value as 'in' | 'out')}><option value="in">Entrada de stock</option><option value="out">Salida de stock</option></select></label>
-      <label>Cantidad<input type="number" min="1" max="1000000" step="1" required value={quantity} onChange={e => setQuantity(e.target.value)} /></label>
+    <fieldset disabled={busy || Boolean(pending)}><label>Movimiento<select value={direction} onChange={e => setDirection(e.target.value as 'in' | 'out')}><option value="in">Ingreso de prendas terminadas</option><option value="out">Salida de prendas terminadas</option></select></label>
+      <label>Cantidad de prendas<input type="number" min="1" max="1000000" step="1" required value={quantity} onChange={e => setQuantity(e.target.value)} /></label>
       <label>Motivo<textarea minLength={5} maxLength={250} required rows={3} value={reason} onChange={e => setReason(e.target.value)} placeholder="Ej. Recepción de compra al proveedor" /></label></fieldset>
     <div className="catalog-actions"><button type="button" className="catalog-button" disabled={busy} onClick={onClose}>Cerrar</button><button type="submit" className="add-user-button" disabled={busy}>{busy ? 'Confirmando…' : pending ? 'Reintentar la misma operación' : 'Confirmar movimiento'}</button></div>
   </form></Modal>;

@@ -5,19 +5,21 @@ import CatalogManagement from './CatalogManagement';
 import InventoryManagement from './InventoryManagement';
 import OrderManagement from './OrderManagement';
 import QuoteManagement from './QuoteManagement';
+import MaterialsProduction from './MaterialsProduction';
 import './catalog.css';
 import { supabase } from '../lib/supabase';
 import { getOrderMetrics, type OrderMetrics } from '../lib/adminMetrics';
 import { displayAmount } from '../lib/adminOrders';
 
 type Props = { session?: Session };
-type View = 'dashboard' | 'users' | 'catalog' | 'inventory' | 'orders' | 'quotes';
+type View = 'dashboard' | 'users' | 'catalog' | 'inventory' | 'materials' | 'orders' | 'quotes';
 
 const navigation: Array<{ label: string; icon: string; view: View }> = [
   { label: 'Resumen', icon: '▦', view: 'dashboard' },
   { label: 'Usuarios', icon: '♙', view: 'users' },
   { label: 'Catálogo', icon: '▧', view: 'catalog' },
-  { label: 'Inventario', icon: '▤', view: 'inventory' },
+  { label: 'Prendas terminadas', icon: '▤', view: 'inventory' },
+  { label: 'Materiales y producción', icon: '◌', view: 'materials' },
   { label: 'Pedidos', icon: '▣', view: 'orders' },
   { label: 'Cotizaciones', icon: '▥', view: 'quotes' },
 ];
@@ -49,7 +51,7 @@ function AdminDashboard({ session }: Props) {
 
       <main className="main-content" id="dashboard">
         <header className="topbar admin-topbar">
-          <div><p className="eyebrow">TextilFlow 2.0 · Centro de operaciones</p><span className="page-context">{{ dashboard: 'Resumen general', users: 'Administración de usuarios', catalog: 'Catálogo de prendas', inventory: 'Control de inventario', orders: 'Gestión de pedidos', quotes: 'Gestión de cotizaciones' }[view]}</span></div>
+          <div><p className="eyebrow">TextilFlow 2.0 · Centro de operaciones</p><span className="page-context">{{ dashboard: 'Resumen general', users: 'Administración de usuarios', catalog: 'Catálogo de prendas', inventory: 'Prendas terminadas', materials: 'Materiales y producción', orders: 'Gestión de pedidos', quotes: 'Gestión de cotizaciones' }[view]}</span></div>
           <div className="topbar-actions"><span className="live-status"><i /> Operación activa</span><div className="user-profile"><div className="avatar">TF</div><div><strong>{session?.user.email ?? 'Admin TextilFlow'}</strong><span>Administrador</span></div>{session && <button className="logout-button" onClick={handleSignOut}>Salir</button>}</div></div>
         </header>
 
@@ -57,6 +59,7 @@ function AdminDashboard({ session }: Props) {
         {view === 'users' && <UserManagement />}
         {view === 'catalog' && <CatalogManagement />}
         {view === 'inventory' && <InventoryManagement userId={session?.user.id} />}
+        {view === 'materials' && <MaterialsProduction />}
         {view === 'orders' && <OrderManagement />}
         {view === 'quotes' && <QuoteManagement />}
       </main>
@@ -84,7 +87,7 @@ function DashboardOverview() {
   ];
   return <section className="dashboard-overview" aria-labelledby="dashboard-title">
     <div className="overview-grid">
-      <article className="welcome-card"><div><p className="eyebrow">Resumen conectado · horario de Bolivia</p><h1 id="dashboard-title">Gestión textil<br /><em>con intención.</em></h1><p>Gestiona el taller desde Usuarios, Catálogo, Inventario y Pedidos.</p></div><span className="welcome-orb" aria-hidden="true" /></article>
+      <article className="welcome-card"><div><p className="eyebrow">Resumen conectado · horario de Bolivia</p><h1 id="dashboard-title">Gestión textil<br /><em>con intención.</em></h1><p>Gestiona pedidos, materiales, producción y prendas terminadas desde un solo lugar.</p></div><span className="welcome-orb" aria-hidden="true" /></article>
       <article className="focus-card" aria-label="Estado de producción"><div className="focus-heading"><span>Producción activa</span><i>•</i></div><strong>{data?.in_production ?? '—'}</strong><p>órdenes en proceso</p><div className="focus-footer"><span>{busy ? 'Consultando indicadores…' : data ? `Actualizado ${new Date(data.as_of).toLocaleTimeString('es-BO', { timeZone: 'America/La_Paz' })}` : 'Indicadores no disponibles'}</span><button className="catalog-button" disabled={busy} onClick={() => setRefresh(v => v + 1)}>Actualizar resumen</button></div></article>
     </div>
     <section className="metrics-section" aria-label="Métricas principales"><div className="section-heading"><div><p className="eyebrow">Pulso operativo</p><h2>Tu operación, <em>en una mirada.</em></h2></div><span>{busy ? 'Consultando…' : data ? 'Datos reales · Supabase' : 'Sin datos disponibles'}</span></div>{error && <p role="alert" className="users-message error">{error}</p>}<div className="metrics-grid">{metrics.map((metric) => <article className={`metric-card ${metric.tone}`} key={metric.label}><span className="metric-symbol">{metric.symbol}</span><span className="metric-label">{metric.label}</span><strong>{metric.value}</strong><small>{metric.detail}</small></article>)}</div></section>

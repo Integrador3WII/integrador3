@@ -1,0 +1,13 @@
+{
+  "name": "@textilflow/shared",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./portal": "./src/portal.tsx",
+    "./portal.css": "./src/portal.css"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.1",
+    "react": "^19.1.0"
+  }
+}

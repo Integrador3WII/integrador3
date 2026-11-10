@@ -1,0 +1,14 @@
+{
+  "id": "/",
+  "name": "TextilFlow Taller",
+  "short_name": "Taller",
+  "lang": "es",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f3f6f1",
+  "theme_color": "#123f36",
+  "icons": [
+    { "src": "/textilflow.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

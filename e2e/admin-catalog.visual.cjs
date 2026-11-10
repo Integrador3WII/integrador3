@@ -54,7 +54,7 @@ const movement = { id: 'm1', operation_id: 'o1', product_variant_id: 'v1', movem
     await page.screenshot({ path: path.join(out, 'variant-form.png'), fullPage: true });
     await page.keyboard.press('Escape');
     assert.equal(await page.getByRole('dialog').count(), 0);
-    await page.getByRole('button', { name: 'Inventario', exact: true }).click();
+    await page.getByRole('button', { name: 'Prendas terminadas', exact: true }).click();
     await page.getByText(variant.sku, { exact: true }).waitFor();
     await page.getByRole('button', { name: 'Modo oscuro', exact: true }).click();
     await page.screenshot({ path: path.join(out, 'inventory-dark.png'), fullPage: true });
