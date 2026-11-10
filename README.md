@@ -15,7 +15,7 @@ El incremento se concentra en Dev2 y está planificado en [SCRUM-85](https://cuq
 - Resumen con indicadores reales calculados en horario de Bolivia.
 - Pruebas de interfaz, contratos PostgreSQL aislados y validación visual con datos simulados.
 
-**Estado:** funciones de pedidos, cotizaciones, métricas y movimientos manuales instaladas en Supabase. Pruebas locales, comprobación SQL remota con rollback y revisión de navegador con respuestas simuladas. La aprobación del equipo, revisión del PR y merge se registran cuando ocurran.
+**Estado:** Admin Web 03 está integrado en `develop`. Sus funciones de pedidos, cotizaciones, métricas y movimientos manuales están documentadas como instaladas en Supabase. Las migraciones posteriores de materiales y portales tienen validación local.
 
 El resumen utiliza datos reales; los errores no se convierten en ceros. Usuarios mantiene su integración anterior. La migración amplia de catálogo/inventario de Admin Web 02 sigue sin aplicarse completa: las restricciones adicionales de publicación, duplicados normalizados y permisos directos de inventario no se declaran desplegadas. La API de movimientos se instaló mediante una migración aditiva independiente.
 Detalle de resultados, límites y evidencias: [reporte del incremento](docs/REPORTE-ADMIN-WEB-03-AVANCE-03.md).
@@ -25,8 +25,8 @@ Detalle de resultados, límites y evidencias: [reporte del incremento](docs/REPO
 ```text
 apps/
   admin-web/       # Dev 2: dashboard, productos, pedidos e inventario
-  client-web/      # Próximo incremento: experiencia del cliente
-  mobile/          # Próximo incremento: operación y control de calidad
+  client-web/      # Catálogo, solicitudes, ofertas y seguimiento de pedidos
+  mobile/          # PWA de taller: producción, calidad y entrega
 packages/
   shared/          # Tipos y utilidades compartidas
 supabase/
@@ -48,6 +48,20 @@ npm run dev:admin
 
 La configuración de Supabase se documenta en `apps/admin-web/.env.example`. No se deben subir credenciales reales.
 
+### Portal cliente y taller
+
+Copia el `.env.example` de cada app a `.env.local` en la misma carpeta y completa la URL y la clave pública del mismo proyecto de Supabase.
+
+```bash
+npm run dev:client  # http://localhost:5175
+npm run dev:mobile  # http://localhost:5176
+npm run build:portals
+```
+
+- Cliente puede explorar el catálogo publicado, registrarse, cotizar varias variantes con notas, responder a una oferta y consultar sus pedidos. Supabase Auth debe permitir el registro y la URL de retorno si se usa confirmación por correo. La solicitud inicial se registra con recogida. Las indicaciones adicionales se guardan como notas para el taller.
+- Taller usa cuentas activas de operador o administrador. Desde el móvil se inicia la producción, se completan tareas, se registra la revisión de medidas, acabados y personalización, y se marca la entrega. Una devolución de calidad reabre las tareas completadas del pedido. La PWA se puede instalar desde el navegador en HTTPS y requiere conexión para operar.
+- Antes de apuntar los frontends a otro entorno, verifica el historial de Supabase. La base debe incluir las cinco migraciones de materiales del 2 de noviembre y, en orden, `20261110183000_restore_order_stock_from_sales.sql`, `20261110183100_customer_portal.sql` y `20261110183200_staff_production_portal.sql`.
+
 ## Verificación
 
 ```bash
@@ -56,10 +70,13 @@ npm run test:admin
 npm --workspace apps/admin-web run test:db
 npm --workspace apps/admin-web run test:concurrency
 npm run build:admin
+npm run build:portals
 ```
 
 `test:db` usa PGlite aislado. `test:concurrency` necesita Docker y crea un contenedor PostgreSQL temporal, que elimina al terminar; la imagen por defecto es `bitnami/postgresql:latest` (configurable con `QA_POSTGRES_IMAGE`). No utiliza tu proyecto remoto.
 
 Para verificar la interfaz: inicia la web en `127.0.0.1:5174` y ejecuta `node e2e/admin-catalog.visual.cjs` y `node e2e/admin-workflows.visual.cjs`. Requieren Microsoft Edge y usan respuestas HTTP simuladas. Las capturas se guardan en `e2e/artifacts/`, excluido de Git.
+
+Para verificar los portales en Edge, inicia ambas apps en los puertos indicados con `VITE_SUPABASE_URL=https://textilflow-fixture.supabase.co` y `VITE_SUPABASE_PUBLISHABLE_KEY=fixture`. Ejecuta `node e2e/portals.cjs` desde la raíz. El navegador intercepta las peticiones y no escribe en Supabase.
 
 Los fixtures de pruebas no son un instalador de Supabase: no ejecutar `db reset` ni un `db push` indiscriminado. Las migraciones se prepararon sobre una base existente y algunas migraciones anteriores solo están parcialmente desplegadas. Revisar el historial remoto y el reporte antes de instalar en otro ambiente.
