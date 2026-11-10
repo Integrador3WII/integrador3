@@ -1,6 +1,6 @@
 // Full PostgreSQL two-session test. Creates/removes only its own disposable container.
 const {spawn}=require('node:child_process');
-const {readFile}=require('node:fs/promises');
+const {readFile,readdir}=require('node:fs/promises');
 const {randomUUID}=require('node:crypto');
 const assert=require('node:assert/strict');
 const path=require('node:path');
@@ -22,7 +22,12 @@ const sql=s=>command(['exec','-i','-e',`PGPASSWORD=${password}`,container,'psql'
     const baseline=await readFile(path.join(__dirname,'fixtures/order-quote-baseline.sql'),'utf8');
     const migration=await readFile(path.join(__dirname,'../migrations/20261101184030_admin_order_quote_workflows.sql'),'utf8');
     const inventoryApi=await readFile(path.join(__dirname,'../migrations/20261101185431_admin_inventory_movement_api.sql'),'utf8');
-    await sql(baseline+'\n'+migration+'\n'+inventoryApi);
+    const migrations=path.join(__dirname,'../migrations');
+    const materialFiles=(await readdir(migrations)).filter(name=>
+      name.startsWith('20261102') || name.endsWith('_restore_order_stock_from_sales.sql')
+    ).sort();
+    const materialSql=await Promise.all(materialFiles.map(file=>readFile(path.join(migrations,file),'utf8')));
+    await sql([baseline,migration,inventoryApi,...materialSql].join('\n'));
     const [admin,customer,cat,product,variant,quote,item]=Array.from({length:7},randomUUID);
     await sql(`insert into auth.users values ('${admin}'),('${customer}');
       insert into profiles(id,role) values ('${admin}','admin'),('${customer}','customer');
@@ -48,6 +53,12 @@ const sql=s=>command(['exec','-i','-e',`PGPASSWORD=${password}`,container,'psql'
     assert.deepEqual(result,{orders:1,stock:8,sales:1,tasks:1});
     console.log('PASS: two simultaneous conversions create one order, one sale, one task; stock 10 -> 8.');
     const order=(await sql(`select id from orders where quote_id='${quote}';`)).trim();
+    await sql(`${session}
+      select admin_save_recipe('${variant}',jsonb_build_array(jsonb_build_object(
+        'material_id',admin_create_material('TEL-QA','Tela QA','m'),
+        'quantity_per_unit',1
+      )));
+      select admin_set_variant_fulfillment('${variant}','made_to_order');`);
     await Promise.all([sql(`begin;${session}select transition_order_status('${order}','cancelled','Solicitud QA');select pg_sleep(1);commit;`),sql(`${session}select transition_order_status('${order}','cancelled','Solicitud QA');`)]);
     const cancelled=JSON.parse((await sql(`select json_build_object('stock',(select quantity_available from inventory where product_variant_id='${variant}'),'releases',(select count(*) from inventory_movements where movement_type='release'),'history',(select count(*) from order_status_history where to_status='cancelled'));`)).trim());
     assert.deepEqual(cancelled,{stock:10,releases:1,history:1});
