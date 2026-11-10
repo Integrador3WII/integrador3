@@ -6,7 +6,7 @@ import '@textilflow/shared/portal.css';
 type Variant = {
   variant_id: string; product_name: string; description: string | null; category: string;
   color: string; size: string; base_price: number; min_quantity: number;
-  max_quantity: number | null; allows_customization: boolean;
+  max_quantity: number | null; allows_customization: boolean; image_path?: string | null;
 };
 type Line = { variant: Variant; quantity: number };
 type Item = { name: string; color: string; size: string; quantity: number };
@@ -193,6 +193,9 @@ function App() {
           </div> : visible === undefined ? <p role="status">Cargando catálogo…</p> : visible.length === 0
             ? <p className="portal-muted">No encontramos variantes disponibles.</p> : <div className="portal-grid">
               {visible.map(variant => <article key={variant.variant_id} className="portal-card">
+                {portalDb && variant.image_path && <img className="portal-product-photo"
+                  src={portalDb.storage.from('product-images').getPublicUrl(variant.image_path).data.publicUrl}
+                  alt={`${variant.product_name} · ${variant.color}`} width={640} height={640} loading="lazy" />}
                 <span className="portal-badge">{variant.category}</span>
                 <h3>{variant.product_name}</h3>
                 <p>{variant.color} · {variant.size}</p>

@@ -56,6 +56,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
   background: white;
 }
 .portal-auth { width: min(100%, 29rem); }
+.portal-product-photo { display: block; width: 100%; height: auto; border-radius: .5rem; }
 .portal-stack, form { display: grid; gap: .8rem; align-content: start; }
 .portal-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; }
 .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: .8rem; }
