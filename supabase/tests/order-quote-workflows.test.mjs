@@ -12,7 +12,7 @@ before(async () => {
   await db.exec(await readFile(new URL('../migrations/20261101185431_admin_inventory_movement_api.sql', import.meta.url),'utf8'));
   const migrations = new URL('../migrations/', import.meta.url);
   for (const file of (await readdir(migrations)).filter(name =>
-    /^(20261102|20261110183[012]00).*\.sql$/.test(name)
+    /^(20261102|20261110183[0123]00).*\.sql$/.test(name)
   ).sort()) {
     await db.exec(await readFile(new URL(file, migrations), 'utf8'));
   }
@@ -206,8 +206,10 @@ test('the customer and staff portals take a request through delivery with access
   await db.exec('reset role');
   await db.query('insert into auth.users values ($1),($2)', [operator, otherCustomer]);
   await db.query("insert into profiles(id,role) values ($1,'operator'),($2,'customer')", [operator, otherCustomer]);
+  await db.query("update products set image_path='demo/polera.png' where slug='polera'");
   await db.exec('set role anon');
-  assert.ok((await db.query('select * from customer_catalog()')).rows.some(row => row.variant_id === variant));
+  const publicVariant = (await db.query('select * from customer_catalog()')).rows.find(row => row.variant_id === variant);
+  assert.equal(publicVariant.image_path, 'demo/polera.png');
   await assert.rejects(db.query('select customer_activity()'), { code: '42501' });
 
   const requestId = randomUUID();

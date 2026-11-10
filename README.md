@@ -60,7 +60,7 @@ npm run build:portals
 
 - Cliente puede explorar el catálogo publicado, registrarse, cotizar varias variantes con notas, responder a una oferta y consultar sus pedidos. Supabase Auth debe permitir el registro y la URL de retorno si se usa confirmación por correo. La solicitud inicial se registra con recogida. Las indicaciones adicionales se guardan como notas para el taller.
 - Taller usa cuentas activas de operador o administrador. Desde el móvil se inicia la producción, se completan tareas, se registra la revisión de medidas, acabados y personalización, y se marca la entrega. Una devolución de calidad reabre las tareas completadas del pedido. La PWA se puede instalar desde el navegador en HTTPS y requiere conexión para operar.
-- Antes de apuntar los frontends a otro entorno, verifica el historial de Supabase. La base debe incluir las cinco migraciones de materiales del 2 de noviembre y, en orden, `20261110183000_restore_order_stock_from_sales.sql`, `20261110183100_customer_portal.sql` y `20261110183200_staff_production_portal.sql`.
+- Antes de apuntar los frontends a otro entorno, verifica el historial de Supabase. La base debe incluir las cinco migraciones de materiales del 2 de noviembre y las migraciones de inventario y portales del 10 de noviembre en orden. El catálogo usa el bucket público `product-images` para las fotos.
 
 ## Verificación
 
